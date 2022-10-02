@@ -2,17 +2,10 @@
 //
 // NightDriver - (c) 2018 Dave Plummer.  All Rights Reserved.
 //
-// File:        LED Episode 11
-//
 // Description:
 //
 //   Draws sample effects on a an addressable strip using FastLED
 //
-// History:     Sep-15-2020     davepl      Created
-//              Oct-05-2020     davepl      Revised for Episode 07
-//              Oct-11-2020     davepl      Revised for Episode 08
-//              Oct-16-2020     davepl      Revised for Episode 09
-//              Oct-23-2020     davepl      Revised for Episode 10
 //---------------------------------------------------------------------------
 #include "BluetoothSerial.h"
 
