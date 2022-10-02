@@ -43,9 +43,7 @@ int g_PowerLimit = 50000;//900;        // 900mW Power Limit
 
 BluetoothSerial SerialBT;
 int received;// received value will be stored in this variable
-char select_Show = '1';// received value will be stored as CHAR in this variable
-
-CRGB color2 = HeatColor(100);
+char select_Show = '4';// received value will be stored as CHAR in this variable
 
 void setup() 
 {
@@ -73,26 +71,13 @@ void setup()
   Serial.println("The device started, now you can pair it with bluetooth!");
 }
 
-void DrawMarqueeComparison()
-{
-  static float scroll = 0.0f;
-  scroll += 0.1f;
-  if (scroll > 5.0)
-    scroll -= 5.0;
-
-  for (float i = scroll; i < NUM_LEDS/2 -1; i+= 5)
-  {
-    DrawPixels(i, 3, CRGB::Green);
-    DrawPixels(NUM_LEDS-1-(int)i, 3, CRGB::Red);
-  }
-}
 int show_Pointer = 0;
 
 void loop() 
 {
   bool bLED = 0;
   
-  FireEffect fire(NUM_LEDS, 20, 100, 3, NUM_LEDS, true, false);    
+  FireEffect fire(NUM_LEDS, 50, 100, 20, NUM_LEDS, true, false);    
 
   while (true){
     FastLED.clear();
