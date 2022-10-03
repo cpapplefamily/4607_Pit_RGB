@@ -23,6 +23,7 @@
 #define LED_FAN_OFFSET 0        // How far from bottom first pixel is
 #define NUM_LEDS      124       // FastLED definitions
 #define LED_PIN        5
+#define RGB_TOGGLE_PIN 0
 
 CRGB g_LEDs[NUM_LEDS] = {0};    // Frame buffer for FastLED
 
@@ -52,6 +53,7 @@ void setup()
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
+  pinMode(RGB_TOGGLE_PIN, INPUT);
 
 
   while (!Serial) { }
@@ -67,19 +69,63 @@ void setup()
   set_max_power_indicator_LED(LED_BUILTIN);                               // Light the builtin LED if we power throttle
   FastLED.setMaxPowerInMilliWatts(g_PowerLimit);                          // Set the power limit, above which brightness will be throttled
   
+  SerialBT.enableSSP();
+  SerialBT.setPin("1234");
   SerialBT.begin("ESP32_RGB"); //Bluetooth device name
   Serial.println("The device started, now you can pair it with bluetooth!");
+  
 }
 
 int show_Pointer = 0;
 
 void loop() 
 {
-  bool bLED = 0;
+  
   
   FireEffect fire(NUM_LEDS, 50, 100, 20, NUM_LEDS, true, false);    
-
+  boolean resetPin = false;
   while (true){
+
+    if (!digitalRead(RGB_TOGGLE_PIN)){
+      if (!resetPin){
+        Serial.println("Button Pressed: ");
+        Serial.println(select_Show);
+        switch (select_Show)
+        {
+        case '1':
+          select_Show = '2';
+          break;
+        case '2':
+          select_Show = '3';
+          break;
+        case '3':
+          select_Show = '4';
+          break;
+        case '4':
+          select_Show = '5';
+          break;
+        case '5':
+          select_Show = '6';
+          break;
+        case '6':
+          select_Show = '7';
+          break;
+        case '7':
+          select_Show = '1';
+          break;
+        default:
+          select_Show = '1';
+          break;
+        }
+        SerialBT.print("Current Show:");// write on BT app
+        SerialBT.println(select_Show);// write on BT app 
+        Serial.println(select_Show);
+      }
+      resetPin = true;
+    }else{
+      resetPin = false;
+    }
+    
     FastLED.clear();
 
     if(SerialBT.available()){
@@ -91,16 +137,6 @@ void loop()
       }
     }    
 
-    // Simple Color Cycle
-    if (select_Show == '2'){
-      show_Pointer = 2;
-      static byte hue = 0;
-      for (int i = 0; i < NUM_LEDS; i++)
-        DrawFanPixels(i, 1, CHSV(hue, 255, 255));
-      hue += 4;
-      delay(500);
-      SerialBT.println(hue);
-    }
     
     
 
@@ -114,6 +150,17 @@ void loop()
         DrawFanPixels(i, 1, CHSV(hue+=16, 255, 255));
       basehue += 4;
       delay(33);
+    }
+
+    // Simple Color Cycle
+    if (select_Show == '2'){
+      show_Pointer = 2;
+      static byte hue = 0;
+      for (int i = 0; i < NUM_LEDS; i++)
+        DrawFanPixels(i, 1, CHSV(hue, 255, 255));
+      hue += 4;
+      delay(500);
+      SerialBT.println(hue);
     }
 
     if (select_Show == '3'){
@@ -136,7 +183,7 @@ void loop()
     if (select_Show == '6'){
       show_Pointer = 6;
       DrawTwinkle();
-      delay(10);
+      delay(100);
     }
 
     FastLED.show(g_Brightness); //  Show and delay

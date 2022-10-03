@@ -36,5 +36,5 @@ void DrawTwinkle()
         FastLED.clear(false);
     }
     FastLED.leds()[random(NUM_LEDS)] = TwinkleColors[random(0, ARRAYSIZE(TwinkleColors))];
-    delay(200);       
+    //delay(200);       
 }

@@ -90,8 +90,6 @@ class FireEffect
         for (int i = 0; i < Size; i++)
         {
             CRGB color = HeatColor(heat[i]);
-            //CRGB color = CRGB(heat[i],0,0);
-            Serial.println(heat[i]);
             int j = bReversed ? (Size - 1 - i) : i;
             DrawFanPixels(j, 1, color, order);
             if (bMirrored)
