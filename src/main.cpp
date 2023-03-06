@@ -222,7 +222,7 @@ void loop()
     if (select_Show == '9'){
       show_Pointer = 9;
       for (int i = 0; i < NUM_LEDS; i++)
-        DrawFanPixels(i, 1, CHSV(160, 255, 255));
+        DrawFanPixels(i, 1, CHSV(172, 255, 255));
       delay(100);
     }
 
