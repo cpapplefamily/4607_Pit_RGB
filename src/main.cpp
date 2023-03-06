@@ -89,7 +89,10 @@ void loop()
     if (!digitalRead(RGB_TOGGLE_PIN)){
       if (!resetPin){
         Serial.println("Button Pressed: ");
+        Serial.println("Last Show: ");
         Serial.println(select_Show);
+     
+
         switch (select_Show)
         {
         case '1':
@@ -111,7 +114,10 @@ void loop()
           select_Show = '7';
           break;
         case '7':
-          select_Show = '1';
+          select_Show = '8';
+          break;
+        case '8':
+          select_Show = '9';
           break;
         default:
           select_Show = '1';
@@ -119,6 +125,7 @@ void loop()
         }
         SerialBT.print("Current Show:");// write on BT app
         SerialBT.println(select_Show);// write on BT app 
+        Serial.println("Current Show:");
         Serial.println(select_Show);
       }
       resetPin = true;
@@ -134,10 +141,22 @@ void loop()
         select_Show = incomingChar;
         SerialBT.print("Received:");// write on BT app
         SerialBT.println(select_Show);// write on BT app 
+        Serial.println("Current Show:");
+        Serial.println(select_Show);
+      }
+    }
+
+    if(Serial.available()){
+      char incomingChar =(char)Serial.read();
+      if (incomingChar != '\n' && incomingChar != '\r'){
+        select_Show = incomingChar;
+        SerialBT.print("Received:");// write on BT app
+        SerialBT.println(select_Show);// write on BT app 
+        Serial.println("Current Show:");
+        Serial.println(select_Show);
       }
     }    
 
-    
     
 
     if (select_Show == '1'){
@@ -152,9 +171,23 @@ void loop()
       delay(33);
     }
 
-    // Simple Color Cycle
     if (select_Show == '2'){
       show_Pointer = 2;
+      for (int i = 0; i < NUM_LEDS; i++)
+        DrawFanPixels(i, 1, CHSV(4, 255, 255));
+      delay(100);
+    }
+
+    if (select_Show == '3'){
+      show_Pointer = 3;
+      for (int i = 0; i < NUM_LEDS; i++)
+        DrawFanPixels(i, 1, CHSV(160, 255, 255));
+      delay(100);
+    }
+
+    // Simple Color Cycle
+    if (select_Show == '4'){
+      show_Pointer = 4;
       static byte hue = 0;
       for (int i = 0; i < NUM_LEDS; i++)
         DrawFanPixels(i, 1, CHSV(hue, 255, 255));
@@ -163,26 +196,33 @@ void loop()
       SerialBT.println(hue);
     }
 
-    if (select_Show == '3'){
-      show_Pointer = 3;
+    if (select_Show == '5'){
+      show_Pointer = 5;
       DrawComet();
       
     }
-    if (select_Show == '4'){
-      show_Pointer = 4;
+    if (select_Show == '6'){
+      show_Pointer = 6;
       fire.DrawFire();
       delay(10);
     }
 
-    if (select_Show == '5'){
-      show_Pointer = 5;
+    if (select_Show == '7'){
+      show_Pointer = 7;
       DrawMarquee();
       delay(10);
     }
 
-    if (select_Show == '6'){
-      show_Pointer = 6;
+    if (select_Show == '8'){
+      show_Pointer = 8;
       DrawTwinkle();
+      delay(100);
+    }
+
+    if (select_Show == '9'){
+      show_Pointer = 9;
+      for (int i = 0; i < NUM_LEDS; i++)
+        DrawFanPixels(i, 1, CHSV(160, 255, 255));
       delay(100);
     }
 
